@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
 void print_arr(int arr[], int size)
@@ -13,34 +14,32 @@ void print_arr(int arr[], int size)
 void next_greater(int arr[], int size)
 {
     int *temp = new int[size];
+    stack<int> st;
 
     for (int i = 0; i < size; i++)
     {
-        int j = i + 1;
-        while(true)
+        temp[i] = -1;
+    }
+    
+    for (int i = 0; i < 2 * size; i++)
+    {
+        int idx = i % size;
+
+        while (!st.empty() && arr[st.top()] < arr[idx])
         {
-            if (j >= size)
-            {
-                j = 0;
-            }
-            if (arr[j] > arr[i])
-            {
-                temp[i] = arr[j];
-                break;
-            }
-            if (j == i)
-            {
-                temp[i] = -1;
-                break;
-            }
-            j++;
+            temp[st.top()] = arr[idx]; 
+            st.pop();                          
+        }
+
+        if (i < size)
+        {
+        st.push(idx); 
         }
     }
 
     print_arr(temp, size);
     delete[] temp;
 }
-
 
 int main()
 {
